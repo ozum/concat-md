@@ -1,6 +1,6 @@
 {
   "name": "concat-md",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "CLI and API to concatenate markdown files and modify as necessary.",
   "keywords": [
     "concat",
@@ -27,7 +27,13 @@
   "bin": {
     "concat-md": "dist/bin/concat-md.js"
   },
-  "files": ["/bin", "/lib/**/!(*.spec|*.test)*.*", "/dist/**/!(*.spec|*.test)*.*", "/@types", "/module-files"],
+  "files": [
+    "/bin",
+    "/lib/**/!(*.spec|*.test)*.*",
+    "/dist/**/!(*.spec|*.test)*.*",
+    "/@types",
+    "/module-files"
+  ],
   "scripts": {
     "build": "rm -rf dist && tsc",
     "lint": "eslint --max-warnings=0 --ignore-path .gitignore --cache 'src/**/*.+(js|jsx|ts|tsx|vue)'",
