@@ -164,17 +164,15 @@ class MarkDownConcatenator {
     });
 
     let result = results.join(this.joinString);
-
     if (this.toc) {
       if (!result.includes(TOC_TAG)) {
-        result = `${TOC_TAG}${result}`;
+        result = `${TOC_TAG}\n\n${result}`;
       }
       const docTocResult = transform(result, "github.com", 3, undefined, true);
       if (docTocResult.transformed) {
         result = docTocResult.data;
       }
     }
-
     return result;
   }
 }
