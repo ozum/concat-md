@@ -1,0 +1,76 @@
+{
+  "name": "concat-md",
+  "version": "0.0.0",
+  "description": "CLI and API to concatenate markdown files and modify as necessary.",
+  "keywords": [
+    "concat",
+    "concatenate",
+    "merge",
+    "join",
+    "markdown",
+    "md",
+    "generator",
+    "creator",
+    "README",
+    "README.md",
+    "TypeDoc",
+    "JSDoc",
+    "FrontMatter",
+    "Meta",
+    "cms"
+  ],
+  "engines": {
+    "node": ">=10.8.0"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "concat-md": "dist/bin/concat-md.js"
+  },
+  "files": ["/bin", "/lib/**/!(*.spec|*.test)*.*", "/dist/**/!(*.spec|*.test)*.*", "/@types", "/module-files"],
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "docs:build": "ts-node src/bin/concat-md.ts",
+    "lint": "eslint --max-warnings=0 --ignore-path .gitignore --cache 'src/**/*.+(js|jsx|ts|tsx|vue)'",
+    "format": "prettier --write --config .prettierrc --check 'src/**/*.+(js|jsx|json|less|css|ts|tsx|md|vue|gql)'",
+    "test": "NODE_ENV=test jest --coverage",
+    "prepublishOnly": "npm run build",
+    "prerelease": "npm-run-all -p lint test format docs:build",
+    "release": "(git diff --quiet && git diff --staged --quiet || git commit -am 'format code') && git checkout master && git pull origin master && git push --follow-tags origin master && npm publish"
+  },
+  "repository": "ozum/measy",
+  "author": "Özüm Eldoğan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ozum/concat-md/issues"
+  },
+  "homepage": "https://github.com/ozum/concat-md#readme",
+  "devDependencies": {
+    "@types/jest": "^24.0.15",
+    "@types/lodash.startcase": "^4.3.6",
+    "@types/meow": "^5.0.0",
+    "@types/node": "^12.0.10",
+    "@types/prettier": "^1.16.4",
+    "@typescript-eslint/eslint-plugin": "^1.12.0",
+    "@typescript-eslint/parser": "^1.12.0",
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jest": "^22.7.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "jest": "^24.8.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.17.1",
+    "ts-jest": "^24.0.2",
+    "ts-node-dev": "^1.0.0-pre.39",
+    "typescript": "^3.5.2"
+  },
+  "dependencies": {
+    "doctoc": "^1.4.0",
+    "front-matter": "^3.0.2",
+    "globby": "^10.0.1",
+    "lodash.startcase": "^4.4.0",
+    "meow": "^5.0.0"
+  }
+}
