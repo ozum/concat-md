@@ -2,10 +2,36 @@
 
 CLI and API to concatenate markdown files and modify as necessary.
 
-# Usage
+# Install
 
 ```
-$ npx concat-md --decrease-title-levels --file-name-as-title --dir-name-as-title typedoc-api-docs > README.md
+$ npm install -g concat-md
+```
+
+or use it via `npx`:
+
+```
+$ npx concat-md
+```
+
+# Usage
+
+**If files have titles in markdown already:**
+
+```
+$ concat-md --toc --decrease-title-levels --dir-name-as-title typedoc-api-docs > README.md
+```
+
+**If files have titles in FrontMatter meta data:**
+
+```
+$ concat-md --toc --decrease-title-levels --title-key title --file-name-as-title --dir-name-as-title docs > README.md
+```
+
+**If files don't have titles:**
+
+```
+$ concat-md --toc --decrease-title-levels --file-name-as-title --dir-name-as-title docs > README.md
 ```
 
 # Features
@@ -13,6 +39,7 @@ $ npx concat-md --decrease-title-levels --file-name-as-title --dir-name-as-title
 - Scans all markdown files in a directory,
 - Optionally ignores some files,
 - Concatenates all of them,
+- Adds table of contents,
 - Optionally adds titles from `FrontMatter`, file names and directory names,
 - Decreases level of existing titles to comply with added titles,
 
@@ -20,10 +47,11 @@ $ npx concat-md --decrease-title-levels --file-name-as-title --dir-name-as-title
 
 ```bash
 Usage
-  $ md-merge [options] <dir>
+  $ concat-md [options] <dir>
 
 Options
   --ignore <globs csv>              - Glob patterns to exclude in 'dir'.
+  --toc                             - Adds table of the contents at the beginning of file.
   --decrease-title-levels           - Whether to decrease levels of all titles in markdown file to set them below file and directory title levels.
   --start-title-level-at <level no> - Level to start file and directory levels. Default: 1
   --join-string <string>            - String to be used to join concatenated files. Default: new line
@@ -33,8 +61,14 @@ Options
   --debug                           - Print stack trace in errors.
 
 Examples
-  $ md-merge docs > README.md
-  $ md-merge --decrease-title-levels --file-name-as-title --dir-name-as-title --title-key typedoc-api > README.md
+  If files have titles in markdown already:
+    $ npx concat-md --toc --decrease-title-levels --dir-name-as-title typedoc-api-docs > README.md
+
+  If files have titles in FrontMatter meta data:
+    $ npx concat-md --toc --decrease-title-levels --title-key title --file-name-as-title --dir-name-as-title docs > README.md
+
+  If files don't have titles:
+    $ npx concat-md --toc --decrease-title-levels --file-name-as-title --dir-name-as-title docs > README.md
 ```
 
 # Example

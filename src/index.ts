@@ -4,6 +4,8 @@ import frontMatter from "front-matter";
 import globby from "globby";
 import startCase from "lodash.startcase";
 
+const transform = require("doctoc/lib/transform"); // eslint-disable-line @typescript-eslint/no-var-requires
+
 const { readFile } = fs.promises;
 
 /**  @ignore */
@@ -16,6 +18,10 @@ interface File {
  * Concat function options.
  */
 export interface ConcatOptions {
+  /**
+   * Whether to add a table of contents.
+   */
+  toc?: boolean;
   /**
    * Glob patterns to exclude in `dir`.
    */
@@ -60,6 +66,7 @@ function arrify<T>(input: T | T[]): T[] {
 /**  @ignore */
 class MarkDownConcatenator {
   private dir: string;
+  private toc: boolean;
   private ignore: string | string[];
   private decreaseTitleLevels: boolean;
   private startTitleLevelAt: number;
@@ -72,6 +79,7 @@ class MarkDownConcatenator {
   public constructor(
     dir: string,
     {
+      toc = false,
       ignore = [],
       decreaseTitleLevels = false,
       startTitleLevelAt = 1,
@@ -82,6 +90,7 @@ class MarkDownConcatenator {
     }: ConcatOptions = {} as any
   ) {
     this.dir = dir;
+    this.toc = toc;
     this.ignore = ignore;
     this.decreaseTitleLevels = decreaseTitleLevels;
     this.startTitleLevelAt = startTitleLevelAt;
@@ -147,13 +156,26 @@ class MarkDownConcatenator {
   }
 
   public async concat(): Promise<string> {
+    const TOC_TAG = "<!-- START doctoc -->\n<!-- END doctoc -->";
     const files = await this.getFileDetails();
     const results = files.map(file => {
       const { title, level } = this.getTitle(file);
       return `${title}${this.decreaseTitleLevelsBy(file.body, level)}`;
     });
 
-    return results.join(this.joinString);
+    let result = results.join(this.joinString);
+
+    if (this.toc) {
+      if (!result.includes(TOC_TAG)) {
+        result = `${TOC_TAG}${result}`;
+      }
+      const docTocResult = transform(result, "github.com", 3, undefined, true);
+      if (docTocResult.transformed) {
+        result = docTocResult.data;
+      }
+    }
+
+    return result;
   }
 }
 
@@ -165,6 +187,6 @@ class MarkDownConcatenator {
  * @returns concatenated contents of markdown files.
  */
 export default async function concatMd(dir: string, options?: ConcatOptions): Promise<string> {
-  const a = new MarkDownConcatenator(dir, options);
-  return a.concat();
+  const markDownConcatenator = new MarkDownConcatenator(dir, options);
+  return markDownConcatenator.concat();
 }
