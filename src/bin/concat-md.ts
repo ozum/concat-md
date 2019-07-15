@@ -13,6 +13,7 @@ interface Result extends meow.Result {
   flags: {
     ignore: string;
     toc: boolean;
+    tocLevel: string;
     decreaseTitleLevels: boolean;
     startTitleLevelAt: string;
     joinString: string;
@@ -28,6 +29,7 @@ interface Result extends meow.Result {
 const FLAGS: meowOptions["flags"] = {
   ignore: { type: "string" },
   toc: { type: "boolean" },
+  tocLevel: { type: "string" },
   decreaseTitleLevels: { type: "boolean" },
   startTitleLevelAt: { type: "string" },
   joinString: { type: "string" },
@@ -45,6 +47,7 @@ Usage
 Options
   --ignore <globs csv>              - Glob patterns to exclude in 'dir'.
   --toc                             - Adds table of the contents at the beginning of file.
+  --toc-level                       - Limit TOC entries to headings only up to the specified level. Default: 3
   --decrease-title-levels           - Whether to decrease levels of all titles in markdown file to set them below file and directory title levels.
   --start-title-level-at <level no> - Level to start file and directory levels. Default: 1
   --join-string <string>            - String to be used to join concatenated files. Default: new line

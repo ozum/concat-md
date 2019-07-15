@@ -42,6 +42,8 @@ $ concat-md --toc --decrease-title-levels --file-name-as-title --dir-name-as-tit
 - Adds table of contents,
 - Optionally adds titles from `FrontMatter`, file names and directory names,
 - Decreases level of existing titles to comply with added titles,
+- Adds anchor tags (`<a name=""></a>`) to files, if no optional titles are generated.
+- Converts relative links to point to concatenated file.
 
 # CLI Options
 

@@ -1,12 +1,22 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import fs from "fs";
 import { join, relative, dirname, basename, extname, sep } from "path";
 import frontMatter from "front-matter";
 import globby from "globby";
 import startCase from "lodash.startcase";
 
-const transform = require("doctoc/lib/transform"); // eslint-disable-line @typescript-eslint/no-var-requires
+const transformLinks = require("transform-markdown-links");
+const transform = require("doctoc/lib/transform");
 
 const { readFile } = fs.promises;
+
+export const gitHubLink = (val: string): string =>
+  val
+    .trim()
+    .toLowerCase()
+    .replace(/[^\w\- ]+/g, "")
+    .replace(/\s/g, "-")
+    .replace(/-+$/, "");
 
 /**  @ignore */
 interface File {
@@ -22,6 +32,10 @@ export interface ConcatOptions {
    * Whether to add a table of contents.
    */
   toc?: boolean;
+  /**
+   * Limit TOC entries to headings only up to the specified level.
+   */
+  tocLevel?: number;
   /**
    * Glob patterns to exclude in `dir`.
    */
@@ -75,11 +89,15 @@ class MarkDownConcatenator {
   private dirNameAsTitle: boolean;
   private joinString: string;
   private visitedDirs: Set<string> = new Set();
+  private fileTitleIndex: Map<string, { title: string; level: number; md: string }> = new Map();
+  private tocLevel: number;
+  private files: File[] = [];
 
   public constructor(
     dir: string,
     {
       toc = false,
+      tocLevel = 3,
       ignore = [],
       decreaseTitleLevels = false,
       startTitleLevelAt = 1,
@@ -91,6 +109,7 @@ class MarkDownConcatenator {
   ) {
     this.dir = dir;
     this.toc = toc;
+    this.tocLevel = tocLevel;
     this.ignore = ignore;
     this.decreaseTitleLevels = decreaseTitleLevels;
     this.startTitleLevelAt = startTitleLevelAt;
@@ -117,12 +136,12 @@ class MarkDownConcatenator {
   }
 
   private getDirParts(file: File): string[] {
-    return relative(this.dir, dirname(file.path)).split(sep);
+    return this.dir === dirname(file.path) ? [] : relative(this.dir, dirname(file.path)).split(sep);
   }
 
-  private getTitle(file: File): { title: string; level: number } {
-    let title = "";
-    let fileTitle = "";
+  private addTitle(file: File): void {
+    let titleMd = "";
+    let fileTitle;
     const titleSuffix = "\n\n";
     let level = this.startTitleLevelAt - 1;
 
@@ -130,49 +149,98 @@ class MarkDownConcatenator {
       let currentDir = "";
       const dirParts = this.getDirParts(file);
       dirParts.forEach(part => {
-        currentDir += sep + part;
+        currentDir += currentDir ? sep + part : part;
         level += 1;
         if (!this.visitedDirs.has(currentDir)) {
           const dirTitlePrefix = "#".repeat(level); // #, ##, ### ...etc.
-          title += `${dirTitlePrefix} ${startCase(part)}${titleSuffix}`;
+          const dirTitle = startCase(part);
+          titleMd += `${dirTitlePrefix} ${dirTitle}${titleSuffix}`;
           this.visitedDirs.add(currentDir);
+          this.fileTitleIndex.set(join(this.dir, currentDir), { title: dirTitle, md: titleMd, level });
         }
       });
     }
-    // console.log(this.titleKey, file.attributes, file.attributes[this.titleKey as any]);
-    if (this.titleKey && file.attributes && file.attributes[this.titleKey]) {
-      fileTitle = file.attributes[this.titleKey];
-    } else if (this.fileNameAsTitle) {
-      fileTitle = `${startCase(basename(file.path, extname(file.path)))}`;
-    }
 
-    if (fileTitle) {
+    const titleFromMeta: string = this.titleKey && file.attributes && file.attributes[this.titleKey];
+    const titleFromFileName = `${startCase(basename(file.path, extname(file.path)))}`;
+
+    if (titleFromMeta || this.fileNameAsTitle) {
+      fileTitle = titleFromMeta || titleFromFileName;
       level += 1;
       const titlePrefix = "#".repeat(level); // #, ##, ### ...etc.
-      title += `${titlePrefix} ${fileTitle}${titleSuffix}`;
+      titleMd += `${titlePrefix} ${fileTitle}${titleSuffix}`;
+    } else {
+      fileTitle = gitHubLink(relative(this.dir, file.path));
+      titleMd += `\n<a name="${fileTitle}"></a>\n\n`; // Provide an anchor to point links to this location. (For existing links pointing to file.)
     }
 
-    return { title, level };
+    this.fileTitleIndex.set(file.path, { title: fileTitle, md: titleMd, level });
+  }
+
+  private getTitle(filePath: string): { title: string; level: number; md: string } {
+    const title = this.fileTitleIndex.get(filePath);
+    /* istanbul ignore next */
+    if (!title) {
+      throw new Error(`Cannot get title for ${filePath}`);
+    }
+    return title;
+  }
+
+  private addToc(content: string): string {
+    if (!this.toc) {
+      return content;
+    }
+    const TOC_TAG = "<!-- START doctoc -->\n<!-- END doctoc -->";
+    let result = content;
+
+    if (!result.includes(TOC_TAG)) {
+      result = `${TOC_TAG}\n\n${result}`;
+    }
+    const docTocResult = transform(result, "github.com", this.tocLevel, undefined, true);
+    if (docTocResult.transformed) {
+      result = docTocResult.data;
+    }
+    return result;
+  }
+
+  private modifyLinks(file: File): string {
+    return transformLinks(file.body, (link: string, text: string): string => {
+      if (link.startsWith("http")) {
+        return link;
+      }
+
+      // [ModifyCondition](../interfaces/modifycondition.md)    - Link to file.
+      // [FileFormat](../README.md#fileformat)                  - Section in relative file.
+      // [saveSync](datafile.md#savesync)                       - Link in same file
+      // <a name="there_you_go"></a>Take me there
+
+      const absoluteTargetPath = join(dirname(file.path), link);
+      const hashPosition = absoluteTargetPath.indexOf("#");
+      const hash = hashPosition > -1 ? absoluteTargetPath.slice(hashPosition) : "";
+      const targetFile = hashPosition > -1 ? absoluteTargetPath.slice(0, hashPosition) : absoluteTargetPath;
+      const newLink = hash || `#${gitHubLink(this.getTitle(targetFile).title)}`;
+      return newLink;
+      // console.log(link, newLink, targetFile, hash);
+    });
   }
 
   public async concat(): Promise<string> {
-    const TOC_TAG = "<!-- START doctoc -->\n<!-- END doctoc -->";
     const files = await this.getFileDetails();
-    const results = files.map(file => {
-      const { title, level } = this.getTitle(file);
-      return `${title}${this.decreaseTitleLevelsBy(file.body, level)}`;
+
+    files.forEach(file => {
+      this.addTitle(file);
+      const { level, md } = this.getTitle(file.path);
+      const body = this.decreaseTitleLevelsBy(file.body, level);
+      file.body = `${md}${body}`; // eslint-disable-line no-param-reassign
     });
 
-    let result = results.join(this.joinString);
-    if (this.toc) {
-      if (!result.includes(TOC_TAG)) {
-        result = `${TOC_TAG}\n\n${result}`;
-      }
-      const docTocResult = transform(result, "github.com", 3, undefined, true);
-      if (docTocResult.transformed) {
-        result = docTocResult.data;
-      }
-    }
+    // 2nd pass loop is necessary, because all titles has to be processed.
+    files.forEach(file => {
+      file.body = this.modifyLinks(file); // eslint-disable-line no-param-reassign
+    });
+
+    let result = files.map(file => file.body).join(this.joinString);
+    result = this.addToc(result);
     return result;
   }
 }

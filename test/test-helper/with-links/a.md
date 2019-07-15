@@ -1,0 +1,6 @@
+[GitHub](https://www.github.com)
+[b](b.md)
+[a-sub](sub/a-sub.md)
+[self-a](a.md#self-a)
+[title-b](b.md#title-b)
+[sub-title-b](sub/b-sub.md#title-b)

@@ -76,6 +76,7 @@
     "front-matter": "^3.0.2",
     "globby": "^10.0.1",
     "lodash.startcase": "^4.4.0",
-    "meow": "^5.0.0"
+    "meow": "^5.0.0",
+    "transform-markdown-links": "^2.0.0"
   }
 }
