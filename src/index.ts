@@ -204,7 +204,7 @@ class MarkDownConcatenator {
   }
 
   private modifyLinks(file: File): string {
-    return transformLinks(file.body, (link: string, text: string): string => {
+    return transformLinks(file.body, (link: string): string => {
       if (link.startsWith("http")) {
         return link;
       }
