@@ -11,7 +11,7 @@ $ npm install -g concat-md
 or use it via `npx`:
 
 ```
-$ npx concat-md
+$ npx concat-md docs
 ```
 
 # Usage
@@ -147,3 +147,160 @@ Utility details lorem ipsum...
 
 Screen details lorem ipsum...
 ```
+
+# API
+
+<a name="readmemd"></a>
+
+> **[concat-md](#readmemd)**
+
+### Index
+
+#### Interfaces
+
+- [ConcatOptions](#interfacesconcatoptionsmd)
+
+#### Functions
+
+- [concatMd](#concatmd)
+
+## Functions
+
+### concatMd
+
+▸ **concatMd**(`dir`: string, `options?`: [ConcatOptions](#interfacesconcatoptionsmd)): _`Promise<string>`_
+
+_Defined in [index.ts:261](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L261)_
+
+Scans and concatenates all markdown files in given directory.
+
+**Parameters:**
+
+| Name       | Type                                        | Description                                               |
+| ---------- | ------------------------------------------- | --------------------------------------------------------- |
+| `dir`      | string                                      | is the directory to scan markdown files in.               |
+| `options?` | [ConcatOptions](#interfacesconcatoptionsmd) | are several parameters to modify concatenation behaviour. |
+
+**Returns:** _`Promise<string>`_
+
+concatenated contents of markdown files.
+
+# Interfaces
+
+<a name="interfacesconcatoptionsmd"></a>
+
+> **[concat-md](#readmemd)**
+
+[ConcatOptions](#interfacesconcatoptionsmd) /
+
+## Interface: ConcatOptions
+
+Concat function options.
+
+### Hierarchy
+
+- **ConcatOptions**
+
+#### Index
+
+##### Properties
+
+- [decreaseTitleLevels](#optional-decreasetitlelevels)
+- [dirNameAsTitle](#optional-dirnameastitle)
+- [fileNameAsTitle](#optional-filenameastitle)
+- [ignore](#optional-ignore)
+- [joinString](#optional-joinstring)
+- [startTitleLevelAt](#optional-starttitlelevelat)
+- [titleKey](#optional-titlekey)
+- [toc](#optional-toc)
+- [tocLevel](#optional-toclevel)
+
+### Properties
+
+#### `Optional` decreaseTitleLevels
+
+• **decreaseTitleLevels**? : _undefined | false | true_
+
+_Defined in [index.ts:52](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L52)_
+
+Whether to decrease levels of all titles in markdown file to set them below file and directory title levels.
+
+---
+
+#### `Optional` dirNameAsTitle
+
+• **dirNameAsTitle**? : _undefined | false | true_
+
+_Defined in [index.ts:72](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L72)_
+
+Whether to use directory names as titles.
+
+---
+
+#### `Optional` fileNameAsTitle
+
+• **fileNameAsTitle**? : _undefined | false | true_
+
+_Defined in [index.ts:68](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L68)_
+
+Whether to use file names as titles.
+
+---
+
+#### `Optional` ignore
+
+• **ignore**? : _string | string[]_
+
+_Defined in [index.ts:48](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L48)_
+
+Glob patterns to exclude in `dir`.
+
+---
+
+#### `Optional` joinString
+
+• **joinString**? : _undefined | string_
+
+_Defined in [index.ts:60](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L60)_
+
+String to be used to join concatenated files.
+
+---
+
+#### `Optional` startTitleLevelAt
+
+• **startTitleLevelAt**? : _undefined | number_
+
+_Defined in [index.ts:56](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L56)_
+
+Level to start file and directory levels.
+
+---
+
+#### `Optional` titleKey
+
+• **titleKey**? : _undefined | string_
+
+_Defined in [index.ts:64](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L64)_
+
+Key name to get title in `FrontMatter` meta data in markdown headers.
+
+---
+
+#### `Optional` toc
+
+• **toc**? : _undefined | false | true_
+
+_Defined in [index.ts:40](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L40)_
+
+Whether to add a table of contents.
+
+---
+
+#### `Optional` tocLevel
+
+• **tocLevel**? : _undefined | number_
+
+_Defined in [index.ts:44](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L44)_
+
+Limit TOC entries to headings only up to the specified level.

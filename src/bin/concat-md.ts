@@ -1,12 +1,13 @@
 #!/usr/bin/env node
-/* eslint-disable no-console */
+/* eslint-disable no-console, prefer-destructuring */
 import meow, { Options as meowOptions } from "meow";
 import { resolve } from "path";
 import { EOL } from "os";
 import fs from "fs";
 import concatMd from "../index";
 
-const { lstat } = fs.promises;
+/** @ignore */
+const lstat = fs.promises.lstat;
 
 /** @ignore */
 interface Result extends meow.Result {

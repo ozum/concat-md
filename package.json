@@ -27,15 +27,10 @@
   "bin": {
     "concat-md": "dist/bin/concat-md.js"
   },
-  "files": [
-    "/bin",
-    "/lib/**/!(*.spec|*.test)*.*",
-    "/dist/**/!(*.spec|*.test)*.*",
-    "/@types",
-    "/module-files"
-  ],
+  "files": ["/bin", "/lib/**/!(*.spec|*.test)*.*", "/dist/**/!(*.spec|*.test)*.*", "/@types", "/module-files"],
   "scripts": {
     "build": "rm -rf dist && tsc",
+    "docs:build-md": "typedoc --plugin typedoc-plugin-example-tag,typedoc-plugin-markdown --excludeExternals --excludePrivate --excludeProtected --theme markdown --mode file --out api --readme none && ts-node src/bin/concat-md.ts --decrease-title-levels --dir-name-as-title api > API.md && rm -rf api",
     "lint": "eslint --max-warnings=0 --ignore-path .gitignore --cache 'src/**/*.+(js|jsx|ts|tsx|vue)'",
     "format": "prettier --write --config .prettierrc --check 'src/**/*.+(js|jsx|json|less|css|ts|tsx|md|vue|gql)'",
     "test": "NODE_ENV=test jest --coverage",
@@ -69,6 +64,9 @@
     "prettier": "^1.17.1",
     "ts-jest": "^24.0.2",
     "ts-node-dev": "^1.0.0-pre.39",
+    "typedoc": "github:TypeStrong/typedoc",
+    "typedoc-plugin-example-tag": "^1.0.2",
+    "typedoc-plugin-markdown": "^2.0.9",
     "typescript": "^3.5.2"
   },
   "dependencies": {

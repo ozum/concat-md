@@ -1,22 +1,28 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-var-requires, prefer-destructuring  */
 import fs from "fs";
 import { join, relative, dirname, basename, extname, sep } from "path";
 import frontMatter from "front-matter";
 import globby from "globby";
 import startCase from "lodash.startcase";
 
+/** @ignore */
 const transformLinks = require("transform-markdown-links");
+
+/** @ignore */
 const transform = require("doctoc/lib/transform");
 
-const { readFile } = fs.promises;
+/** @ignore */
+const readFile = fs.promises.readFile;
 
-export const gitHubLink = (val: string): string =>
-  val
+/** @ignore */
+export function gitHubLink(val: string): string {
+  return val
     .trim()
     .toLowerCase()
     .replace(/[^\w\- ]+/g, "")
     .replace(/\s/g, "-")
     .replace(/-+$/, "");
+}
 
 /**  @ignore */
 interface File {
