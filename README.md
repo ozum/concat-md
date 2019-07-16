@@ -43,7 +43,8 @@ $ concat-md --toc --decrease-title-levels --file-name-as-title --dir-name-as-tit
 - Optionally adds titles from `FrontMatter`, file names and directory names,
 - Decreases level of existing titles to comply with added titles,
 - Adds anchor tags (`<a name=""></a>`) to files, if no optional titles are generated.
-- Converts relative links to point to concatenated file.
+- Converts relative links to point to concatenated file,
+- Works async (default) and sync.
 
 # CLI Options
 
@@ -163,6 +164,7 @@ Screen details lorem ipsum...
 #### Functions
 
 - [concatMd](#concatmd)
+- [concatMdSync](#concatmdsync)
 
 ## Functions
 
@@ -170,9 +172,15 @@ Screen details lorem ipsum...
 
 ▸ **concatMd**(`dir`: string, `options?`: [ConcatOptions](#interfacesconcatoptionsmd)): _`Promise<string>`_
 
-_Defined in [index.ts:261](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L261)_
+_Defined in [index.ts:295](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L295)_
 
 Scans and concatenates all markdown files in given directory.
+
+#### Example
+
+```typescript
+import concatMd, { concatMdSync } from "concat-md";
+```
 
 **Parameters:**
 
@@ -182,6 +190,33 @@ Scans and concatenates all markdown files in given directory.
 | `options?` | [ConcatOptions](#interfacesconcatoptionsmd) | are several parameters to modify concatenation behaviour. |
 
 **Returns:** _`Promise<string>`_
+
+concatenated contents of markdown files.
+
+---
+
+### concatMdSync
+
+▸ **concatMdSync**(`dir`: string, `options?`: [ConcatOptions](#interfacesconcatoptionsmd)): _string_
+
+_Defined in [index.ts:281](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L281)_
+
+Scans and concatenates all markdown files in given directory.
+
+#### Example
+
+```typescript
+import concatMd, { concatMdSync } from "concat-md";
+```
+
+**Parameters:**
+
+| Name       | Type                                        | Description                                               |
+| ---------- | ------------------------------------------- | --------------------------------------------------------- |
+| `dir`      | string                                      | is the directory to scan markdown files in.               |
+| `options?` | [ConcatOptions](#interfacesconcatoptionsmd) | are several parameters to modify concatenation behaviour. |
+
+**Returns:** _string_
 
 concatenated contents of markdown files.
 
@@ -221,7 +256,7 @@ Concat function options.
 
 • **decreaseTitleLevels**? : _undefined | false | true_
 
-_Defined in [index.ts:52](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L52)_
+_Defined in [index.ts:52](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L52)_
 
 Whether to decrease levels of all titles in markdown file to set them below file and directory title levels.
 
@@ -231,7 +266,7 @@ Whether to decrease levels of all titles in markdown file to set them below file
 
 • **dirNameAsTitle**? : _undefined | false | true_
 
-_Defined in [index.ts:72](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L72)_
+_Defined in [index.ts:72](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L72)_
 
 Whether to use directory names as titles.
 
@@ -241,7 +276,7 @@ Whether to use directory names as titles.
 
 • **fileNameAsTitle**? : _undefined | false | true_
 
-_Defined in [index.ts:68](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L68)_
+_Defined in [index.ts:68](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L68)_
 
 Whether to use file names as titles.
 
@@ -251,7 +286,7 @@ Whether to use file names as titles.
 
 • **ignore**? : _string | string[]_
 
-_Defined in [index.ts:48](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L48)_
+_Defined in [index.ts:48](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L48)_
 
 Glob patterns to exclude in `dir`.
 
@@ -261,7 +296,7 @@ Glob patterns to exclude in `dir`.
 
 • **joinString**? : _undefined | string_
 
-_Defined in [index.ts:60](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L60)_
+_Defined in [index.ts:60](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L60)_
 
 String to be used to join concatenated files.
 
@@ -271,7 +306,7 @@ String to be used to join concatenated files.
 
 • **startTitleLevelAt**? : _undefined | number_
 
-_Defined in [index.ts:56](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L56)_
+_Defined in [index.ts:56](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L56)_
 
 Level to start file and directory levels.
 
@@ -281,7 +316,7 @@ Level to start file and directory levels.
 
 • **titleKey**? : _undefined | string_
 
-_Defined in [index.ts:64](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L64)_
+_Defined in [index.ts:64](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L64)_
 
 Key name to get title in `FrontMatter` meta data in markdown headers.
 
@@ -291,7 +326,7 @@ Key name to get title in `FrontMatter` meta data in markdown headers.
 
 • **toc**? : _undefined | false | true_
 
-_Defined in [index.ts:40](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L40)_
+_Defined in [index.ts:40](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L40)_
 
 Whether to add a table of contents.
 
@@ -301,6 +336,6 @@ Whether to add a table of contents.
 
 • **tocLevel**? : _undefined | number_
 
-_Defined in [index.ts:44](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L44)_
+_Defined in [index.ts:44](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L44)_
 
 Limit TOC entries to headings only up to the specified level.

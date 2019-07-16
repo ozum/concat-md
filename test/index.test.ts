@@ -1,6 +1,6 @@
 import { join } from "path";
 import fs from "fs";
-import concat from "../src/index";
+import concat, { concatMdSync } from "../src/index";
 
 const { readFile } = fs.promises;
 
@@ -9,6 +9,12 @@ const getExpected = (file: string): Promise<string> => readFile(join(__dirname, 
 describe("concat", () => {
   it("should concat files as is.", async () => {
     const result = await concat(join(__dirname, "test-helper/main"));
+    const expected = await getExpected("main-as-is.txt");
+    expect(result).toBe(expected);
+  });
+
+  it("should syncronously concat files as is.", async () => {
+    const result = concatMdSync(join(__dirname, "test-helper/main"));
     const expected = await getExpected("main-as-is.txt");
     expect(result).toBe(expected);
   });

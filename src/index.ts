@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires, prefer-destructuring  */
-import fs from "fs";
+import fs, { readFileSync } from "fs";
 import { join, relative, dirname, basename, extname, sep } from "path";
 import frontMatter from "front-matter";
 import globby from "globby";
@@ -134,11 +134,22 @@ class MarkDownConcatenator {
     return paths.map(path => join(this.dir, path));
   }
 
+  private getFileNamesSync(): string[] {
+    const paths = globby.sync([`**/*.md`], { cwd: this.dir, ignore: arrify(this.ignore) });
+    return paths.map(path => join(this.dir, path));
+  }
+
   private async getFileDetails(): Promise<File[]> {
     const fileNames = await this.getFileNames();
     return Promise.all(
       fileNames.map(async fileName => ({ path: fileName, ...frontMatter(await readFile(fileName, { encoding: "utf8" })) }))
     );
+  }
+
+  private getFileDetailsSync(): File[] {
+    const fileNames = this.getFileNamesSync();
+
+    return fileNames.map(fileName => ({ path: fileName, ...frontMatter(readFileSync(fileName, { encoding: "utf8" })) }));
   }
 
   private getDirParts(file: File): string[] {
@@ -230,9 +241,7 @@ class MarkDownConcatenator {
     });
   }
 
-  public async concat(): Promise<string> {
-    const files = await this.getFileDetails();
-
+  private concatFiles(files: File[]): string {
     files.forEach(file => {
       this.addTitle(file);
       const { level, md } = this.getTitle(file.path);
@@ -245,9 +254,18 @@ class MarkDownConcatenator {
       file.body = this.modifyLinks(file); // eslint-disable-line no-param-reassign
     });
 
-    let result = files.map(file => file.body).join(this.joinString);
-    result = this.addToc(result);
-    return result;
+    const result = files.map(file => file.body).join(this.joinString);
+    return this.addToc(result);
+  }
+
+  public async concat(): Promise<string> {
+    const files = await this.getFileDetails();
+    return this.concatFiles(files);
+  }
+
+  public concatSync(): string {
+    const files = this.getFileDetailsSync();
+    return this.concatFiles(files);
   }
 }
 
@@ -257,6 +275,22 @@ class MarkDownConcatenator {
  * @param dir is the directory to scan markdown files in.
  * @param options are several parameters to modify concatenation behaviour.
  * @returns concatenated contents of markdown files.
+ * @example
+ * import concatMd, { concatMdSync } from "concat-md"
+ */
+export function concatMdSync(dir: string, options?: ConcatOptions): string {
+  const markDownConcatenator = new MarkDownConcatenator(dir, options);
+  return markDownConcatenator.concatSync();
+}
+
+/**
+ * Scans and concatenates all markdown files in given directory.
+ *
+ * @param dir is the directory to scan markdown files in.
+ * @param options are several parameters to modify concatenation behaviour.
+ * @returns concatenated contents of markdown files.
+ * @example
+ * import concatMd, { concatMdSync } from "concat-md"
  */
 export default async function concatMd(dir: string, options?: ConcatOptions): Promise<string> {
   const markDownConcatenator = new MarkDownConcatenator(dir, options);
