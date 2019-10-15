@@ -16,6 +16,7 @@ const readFile = fs.promises.readFile;
 
 /** @ignore */
 export function gitHubLink(val: string): string {
+  /* istanbul ignore next */
   const value = val || "";
   return value
     .trim()
@@ -240,6 +241,7 @@ class MarkDownConcatenator {
         const newLink = hash || `#${gitHubLink(this.getTitle(targetFile).title)}`;
         return newLink;
       } catch (e) {
+        /* istanbul ignore next */
         return "";
       }
 
