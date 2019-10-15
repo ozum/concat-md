@@ -16,7 +16,8 @@ const readFile = fs.promises.readFile;
 
 /** @ignore */
 export function gitHubLink(val: string): string {
-  return val
+  const value = val || "";
+  return value
     .trim()
     .toLowerCase()
     .replace(/[^\w\- ]+/g, "")
@@ -235,8 +236,13 @@ class MarkDownConcatenator {
       const hashPosition = absoluteTargetPath.indexOf("#");
       const hash = hashPosition > -1 ? absoluteTargetPath.slice(hashPosition) : "";
       const targetFile = hashPosition > -1 ? absoluteTargetPath.slice(0, hashPosition) : absoluteTargetPath;
-      const newLink = hash || `#${gitHubLink(this.getTitle(targetFile).title)}`;
-      return newLink;
+      try {
+        const newLink = hash || `#${gitHubLink(this.getTitle(targetFile).title)}`;
+        return newLink;
+      } catch (e) {
+        return "";
+      }
+
       // console.log(link, newLink, targetFile, hash);
     });
   }

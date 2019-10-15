@@ -111,7 +111,7 @@ async function exec(): Promise<void> {
     if (flags.debug) {
       throw e;
     } else {
-      console.error(`Error: ${e.message}`);
+      console.error(e);
       process.exit(1);
     }
   }
