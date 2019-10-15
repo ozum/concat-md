@@ -1,6 +1,6 @@
 {
   "name": "concat-md",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "CLI and API to concatenate markdown files and modify as necessary.",
   "keywords": [
     "concat",
