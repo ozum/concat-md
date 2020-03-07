@@ -36,7 +36,7 @@ $ concat-md --toc --decrease-title-levels --file-name-as-title --dir-name-as-tit
 
 # Features
 
-- Scans all markdown files in a directory,
+- Scans all or specified markdown files in a directory,
 - Optionally ignores some files,
 - Concatenates all of them,
 - Adds table of contents,
@@ -54,6 +54,8 @@ Usage
 
 Options
   --ignore <globs csv>              - Glob patterns to exclude in 'dir'.
+  --include <globs csv>             - Glob patterns to look for in 'dir'.
+                                      Default: "**/*.md"
   --toc                             - Adds table of the contents at the beginning of file.
   --decrease-title-levels           - Whether to decrease levels of all titles in markdown file to set them below file and directory title levels.
   --start-title-level-at <level no> - Level to start file and directory levels. Default: 1
@@ -244,6 +246,7 @@ Concat function options.
 - [dirNameAsTitle](#optional-dirnameastitle)
 - [fileNameAsTitle](#optional-filenameastitle)
 - [ignore](#optional-ignore)
+- [include](#optional-include)
 - [joinString](#optional-joinstring)
 - [startTitleLevelAt](#optional-starttitlelevelat)
 - [titleKey](#optional-titlekey)
@@ -289,6 +292,16 @@ Whether to use file names as titles.
 _Defined in [index.ts:48](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L48)_
 
 Glob patterns to exclude in `dir`.
+
+---
+
+#### `Optional` include
+
+• **include**? : _string | string[]_
+
+_Defined in [index.ts:48](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L49)_
+
+Glob patterns to look for in `dir`. Default: "**/*.md"
 
 ---
 
