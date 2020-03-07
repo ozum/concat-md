@@ -13,6 +13,7 @@ const lstat = fs.promises.lstat;
 interface Result extends meow.Result {
   flags: {
     ignore: string;
+    title: string;
     toc: boolean;
     tocLevel: string;
     decreaseTitleLevels: boolean;
@@ -29,6 +30,7 @@ interface Result extends meow.Result {
 /** @ignore */
 const FLAGS: meowOptions["flags"] = {
   ignore: { type: "string" },
+  title: { type: "string" },
   toc: { type: "boolean" },
   tocLevel: { type: "string" },
   decreaseTitleLevels: { type: "boolean" },
@@ -47,6 +49,7 @@ Usage
 
 Options
   --ignore <globs csv>              - Glob patterns to exclude in 'dir'.
+  --title <title>                   - Adds title at the beginning of file.
   --toc                             - Adds table of the contents at the beginning of file.
   --toc-level                       - Limit TOC entries to headings only up to the specified level. Default: 3
   --decrease-title-levels           - Whether to decrease levels of all titles in markdown file to set them below file and directory title levels.

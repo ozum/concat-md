@@ -63,6 +63,23 @@ describe("concat", () => {
     expect(result).toBe(expected);
   });
 
+  it("should add global title.", async () => {
+    const result = await concat(join(__dirname, "test-helper/main"), {
+      title: "Extra Title",
+    });
+    const expected = await getExpected("title.txt");
+    expect(result).toBe(expected);
+  });
+
+  it("should add global title and table of contents.", async () => {
+    const result = await concat(join(__dirname, "test-helper/main"), {
+      title: "Extra Title Before TOC",
+      toc: true,
+    });
+    const expected = await getExpected("title-and-toc.txt");
+    expect(result).toBe(expected);
+  });
+
   it("should convert links to titles from files", async () => {
     const result = await concat(join(__dirname, "test-helper/with-links"), { fileNameAsTitle: true, dirNameAsTitle: true });
     const expected = await getExpected("with-links-file-name-as-title.txt");
