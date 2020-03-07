@@ -54,6 +54,7 @@ Usage
 
 Options
   --ignore <globs csv>              - Glob patterns to exclude in 'dir'.
+  --title <title>                   - Adds title at the beginning of file.
   --toc                             - Adds table of the contents at the beginning of file.
   --decrease-title-levels           - Whether to decrease levels of all titles in markdown file to set them below file and directory title levels.
   --start-title-level-at <level no> - Level to start file and directory levels. Default: 1
@@ -247,6 +248,7 @@ Concat function options.
 - [joinString](#optional-joinstring)
 - [startTitleLevelAt](#optional-starttitlelevelat)
 - [titleKey](#optional-titlekey)
+- [title](#optional-title)
 - [toc](#optional-toc)
 - [tocLevel](#optional-toclevel)
 
@@ -319,6 +321,16 @@ Level to start file and directory levels.
 _Defined in [index.ts:64](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L64)_
 
 Key name to get title in `FrontMatter` meta data in markdown headers.
+
+---
+
+#### `Optional` title
+
+• **title**? : _undefined | string_
+
+_Defined in [index.ts:40](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L39)_
+
+A global title to add at the beginning of the output.
 
 ---
 

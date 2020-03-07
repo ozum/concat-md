@@ -1,0 +1,32 @@
+# Extra Title Before TOC
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Doc A](#doc-a)
+- [Doc B1](#doc-b1)
+- [Doc B2](#doc-b2)
+- [Doc BSub](#doc-bsub)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
+<a name="dir-aamd"></a>
+
+# Doc A
+
+
+<a name="dir-bb1md"></a>
+
+# Doc B1
+
+
+<a name="dir-bb2md"></a>
+
+# Doc B2
+
+
+<a name="dir-bdir-b-subdir-b-sub-subb-submd"></a>
+
+# Doc BSub
