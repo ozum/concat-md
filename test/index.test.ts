@@ -13,9 +13,17 @@ describe("concat", () => {
     expect(result).toBe(expected);
   });
 
-  it("should syncronously concat files as is.", async () => {
+  it("should synchronously concat files as is.", async () => {
     const result = concatMdSync(join(__dirname, "test-helper/main"));
     const expected = await getExpected("main-as-is.txt");
+    expect(result).toBe(expected);
+  });
+
+  it("should concat specified files only.", async () => {
+    const result = await concat(join(__dirname, "test-helper/main"), {
+      include: "dir-a/**/*.md",
+    });
+    const expected = await getExpected("main-specified-only.txt");
     expect(result).toBe(expected);
   });
 

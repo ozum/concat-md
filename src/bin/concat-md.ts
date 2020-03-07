@@ -13,6 +13,7 @@ const lstat = fs.promises.lstat;
 interface Result extends meow.Result {
   flags: {
     ignore: string;
+    include: string;
     toc: boolean;
     tocLevel: string;
     decreaseTitleLevels: boolean;
@@ -29,6 +30,7 @@ interface Result extends meow.Result {
 /** @ignore */
 const FLAGS: meowOptions["flags"] = {
   ignore: { type: "string" },
+  include: { type: "string" },
   toc: { type: "boolean" },
   tocLevel: { type: "string" },
   decreaseTitleLevels: { type: "boolean" },
@@ -47,7 +49,8 @@ Usage
 
 Options
   --ignore <globs csv>              - Glob patterns to exclude in 'dir'.
-  --toc                             - Adds table of the contents at the beginning of file.
+  --include <globs csv>             - Glob patterns to look for in 'dir'. Default: "**/*.md"
+  --toc                             - Adds table of the contents at the beginning of file. Default: "**/*.md"
   --toc-level                       - Limit TOC entries to headings only up to the specified level. Default: 3
   --decrease-title-levels           - Whether to decrease levels of all titles in markdown file to set them below file and directory title levels.
   --start-title-level-at <level no> - Level to start file and directory levels. Default: 1
@@ -69,14 +72,25 @@ Examples
 `;
 
 /**
- * Splites CSV string of paths from CLI into array of absolute paths.
+ * Splits CSV string from CLI into array of strings.
  *
- * @param pathsCSV is comma split values of paths to split.
+ * @param valuesCSV is comma-split values to split.
+ * @returns array of string values.
+ * @ignore
+ */
+function splitStrings(valuesCSV: string): string[] {
+  return valuesCSV ? valuesCSV.split(/\s*,\s*/) : [];
+}
+
+/**
+ * Splits CSV string of paths from CLI into array of absolute paths.
+ *
+ * @param pathsCSV is comma-split values of paths to split.
  * @returns array of absolute paths converted from relative to cwd().
  * @ignore
  */
 function splitPaths(pathsCSV: string): string[] {
-  return pathsCSV ? pathsCSV.split(/\s*,\s*/).map(f => resolve(f)) : [];
+  return splitStrings(pathsCSV).map(f => resolve(f));
 }
 
 /** @ignore */
@@ -92,6 +106,7 @@ async function exec(): Promise<void> {
   const flags = {
     ...cli.flags,
     ignore: splitPaths(cli.flags.ignore),
+    include: splitStrings(cli.flags.include),
   };
 
   try {

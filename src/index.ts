@@ -49,6 +49,10 @@ export interface ConcatOptions {
    */
   ignore?: string | string[];
   /**
+   * Glob patterns to look for in `dir`.  Default: "** /*.md"
+   */
+  include?: string | string[];
+  /**
    * Whether to decrease levels of all titles in markdown file to set them below file and directory title levels.
    */
   decreaseTitleLevels?: boolean;
@@ -89,7 +93,8 @@ function arrify<T>(input: T | T[]): T[] {
 class MarkDownConcatenator {
   private dir: string;
   private toc: boolean;
-  private ignore: string | string[];
+  private ignore: string[];
+  private include: string[];
   private decreaseTitleLevels: boolean;
   private startTitleLevelAt: number;
   private titleKey?: string;
@@ -99,7 +104,6 @@ class MarkDownConcatenator {
   private visitedDirs: Set<string> = new Set();
   private fileTitleIndex: Map<string, { title: string; level: number; md: string }> = new Map();
   private tocLevel: number;
-  private files: File[] = [];
 
   public constructor(
     dir: string,
@@ -107,6 +111,7 @@ class MarkDownConcatenator {
       toc = false,
       tocLevel = 3,
       ignore = [],
+      include = [],
       decreaseTitleLevels = false,
       startTitleLevelAt = 1,
       joinString = "\n",
@@ -118,7 +123,8 @@ class MarkDownConcatenator {
     this.dir = dir;
     this.toc = toc;
     this.tocLevel = tocLevel;
-    this.ignore = ignore;
+    this.ignore = arrify(ignore);
+    this.include = include.length ? arrify(include) : ["**/*.md"];
     this.decreaseTitleLevels = decreaseTitleLevels;
     this.startTitleLevelAt = startTitleLevelAt;
     this.joinString = joinString;
@@ -132,12 +138,20 @@ class MarkDownConcatenator {
   }
 
   private async getFileNames(): Promise<string[]> {
-    const paths = await globby([`**/*.md`], { cwd: this.dir, ignore: arrify(this.ignore) });
+    const paths = await globby(this.include, {
+      cwd: this.dir,
+      expandDirectories: ["**/*.md"],
+      ignore: this.ignore,
+    });
     return paths.map(path => join(this.dir, path));
   }
 
   private getFileNamesSync(): string[] {
-    const paths = globby.sync([`**/*.md`], { cwd: this.dir, ignore: arrify(this.ignore) });
+    const paths = globby.sync(this.include, {
+      cwd: this.dir,
+      expandDirectories: ["**/*.md"],
+      ignore: this.ignore,
+    });
     return paths.map(path => join(this.dir, path));
   }
 
