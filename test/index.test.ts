@@ -51,6 +51,14 @@ describe("concat", () => {
     expect(result).toBe(expected);
   });
 
+  it("should join concatenated files using a specified string.", async () => {
+    const result = await concat(join(__dirname, "test-helper/main"), {
+      joinString: "---",
+    });
+    const expected = await getExpected("join-separator.txt");
+    expect(result).toBe(expected);
+  });
+
   it("should add toc tag and table of contents.", async () => {
     const result = await concat(join(__dirname, "test-helper/main"), { toc: true });
     const expected = await getExpected("toc-tag.txt");

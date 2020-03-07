@@ -109,7 +109,7 @@ class MarkDownConcatenator {
       ignore = [],
       decreaseTitleLevels = false,
       startTitleLevelAt = 1,
-      joinString = "\n",
+      joinString,
       titleKey,
       dirNameAsTitle = false,
       fileNameAsTitle = false,
@@ -121,7 +121,7 @@ class MarkDownConcatenator {
     this.ignore = ignore;
     this.decreaseTitleLevels = decreaseTitleLevels;
     this.startTitleLevelAt = startTitleLevelAt;
-    this.joinString = joinString;
+    this.joinString = joinString ? `\n${joinString}\n` : "\n";
     this.titleKey = titleKey;
     this.dirNameAsTitle = dirNameAsTitle;
     this.fileNameAsTitle = fileNameAsTitle;
