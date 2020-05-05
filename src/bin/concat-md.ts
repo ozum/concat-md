@@ -10,7 +10,7 @@ import concatMd from "../index";
 const lstat = fs.promises.lstat;
 
 /** @ignore */
-interface Result extends meow.Result {
+interface Result extends meow.Result<any> {
   flags: {
     ignore: string;
     toc: boolean;
@@ -27,7 +27,7 @@ interface Result extends meow.Result {
 }
 
 /** @ignore */
-const FLAGS: meowOptions["flags"] = {
+const FLAGS: meowOptions<any>["flags"] = {
   ignore: { type: "string" },
   toc: { type: "boolean" },
   tocLevel: { type: "string" },
@@ -76,7 +76,7 @@ Examples
  * @ignore
  */
 function splitPaths(pathsCSV: string): string[] {
-  return pathsCSV ? pathsCSV.split(/\s*,\s*/).map((f) => resolve(f)) : [];
+  return pathsCSV ? pathsCSV.split(/\s*,\s*/).map(f => resolve(f)) : [];
 }
 
 /** @ignore */
@@ -98,7 +98,7 @@ async function exec(): Promise<void> {
     const path = resolve(dir);
     const stat = await lstat(path);
     const isDirectory = stat.isDirectory();
-    const unknownOption = Object.keys(flags).find((key) => FLAGS && !FLAGS[key]);
+    const unknownOption = Object.keys(flags).find(key => FLAGS && !FLAGS[key]);
     if (!isDirectory) {
       throw new Error(`${path} is not a directory.`);
     }
