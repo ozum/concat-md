@@ -133,12 +133,12 @@ class MarkDownConcatenator {
 
   private async getFileNames(): Promise<string[]> {
     const paths = await globby([`**/*.md`], { cwd: this.dir, ignore: arrify(this.ignore) });
-    return paths.map(path => join(this.dir, path));
+    return paths.sort().map(path => join(this.dir, path));
   }
 
   private getFileNamesSync(): string[] {
     const paths = globby.sync([`**/*.md`], { cwd: this.dir, ignore: arrify(this.ignore) });
-    return paths.map(path => join(this.dir, path));
+    return paths.sort().map(path => join(this.dir, path));
   }
 
   private async getFileDetails(): Promise<File[]> {
