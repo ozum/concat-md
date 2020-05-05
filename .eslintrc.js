@@ -23,19 +23,17 @@ module.exports = {
   ],
   plugins: ["@typescript-eslint"],
   settings: {
-    "import/resolver": {
-      node: {
-        extensions: [".js", ".jsx", ".mjs", ".ts", ".tsx"], // Allow import and resolve for *.ts modules.
-      },
-    },
+    "import/resolver": { node: { extensions: [".js", ".jsx", ".mjs", ".ts", ".tsx"] } }, // Allow import and resolve for *.ts modules.,
   },
   rules: {
     "lines-between-class-members": ["warn", "always", { exceptAfterSingleLine: true }],
     "no-dupe-class-members": "off", // Prevents method overload in TypeScript, and TypeScript already checks duplicates.
     "no-unused-vars": "off", // @typescript-eslint/recommended has same rule
     "no-underscore-dangle": "off",
+    "import/prefer-default-export": "off",
     "@typescript-eslint/explicit-function-return-type": ["warn", { allowExpressions: true, allowTypedFunctionExpressions: true }],
     "@typescript-eslint/no-explicit-any": "off",
+    "import/extensions": ["error", "ignorePackages", { "js": "never", "mjs": "never", "jsx": "never", "ts": "never", "tsx": "never" }]
   },
   overrides: [
     {

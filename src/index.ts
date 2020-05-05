@@ -133,25 +133,25 @@ class MarkDownConcatenator {
 
   private async getFileNames(): Promise<string[]> {
     const paths = await globby([`**/*.md`], { cwd: this.dir, ignore: arrify(this.ignore) });
-    return paths.sort().map(path => join(this.dir, path));
+    return paths.sort().map((path) => join(this.dir, path));
   }
 
   private getFileNamesSync(): string[] {
     const paths = globby.sync([`**/*.md`], { cwd: this.dir, ignore: arrify(this.ignore) });
-    return paths.sort().map(path => join(this.dir, path));
+    return paths.sort().map((path) => join(this.dir, path));
   }
 
   private async getFileDetails(): Promise<File[]> {
     const fileNames = await this.getFileNames();
     return Promise.all(
-      fileNames.map(async fileName => ({ path: fileName, ...frontMatter(await readFile(fileName, { encoding: "utf8" })) }))
+      fileNames.map(async (fileName) => ({ path: fileName, ...frontMatter(await readFile(fileName, { encoding: "utf8" })) }))
     );
   }
 
   private getFileDetailsSync(): File[] {
     const fileNames = this.getFileNamesSync();
 
-    return fileNames.map(fileName => ({ path: fileName, ...frontMatter(readFileSync(fileName, { encoding: "utf8" })) }));
+    return fileNames.map((fileName) => ({ path: fileName, ...frontMatter(readFileSync(fileName, { encoding: "utf8" })) }));
   }
 
   private getDirParts(file: File): string[] {
@@ -167,7 +167,7 @@ class MarkDownConcatenator {
     if (this.dirNameAsTitle) {
       let currentDir = "";
       const dirParts = this.getDirParts(file);
-      dirParts.forEach(part => {
+      dirParts.forEach((part) => {
         currentDir += currentDir ? sep + part : part;
         level += 1;
         if (!this.visitedDirs.has(currentDir)) {
@@ -250,7 +250,7 @@ class MarkDownConcatenator {
   }
 
   private concatFiles(files: File[]): string {
-    files.forEach(file => {
+    files.forEach((file) => {
       this.addTitle(file);
       const { level, md } = this.getTitle(file.path);
       const body = this.decreaseTitleLevelsBy(file.body, level);
@@ -258,11 +258,11 @@ class MarkDownConcatenator {
     });
 
     // 2nd pass loop is necessary, because all titles has to be processed.
-    files.forEach(file => {
+    files.forEach((file) => {
       file.body = this.modifyLinks(file); // eslint-disable-line no-param-reassign
     });
 
-    const result = files.map(file => file.body).join(this.joinString);
+    const result = files.map((file) => file.body).join(this.joinString);
     return this.addToc(result);
   }
 
