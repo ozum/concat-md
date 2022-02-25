@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* eslint-disable no-console, prefer-destructuring */
-import meow, { Options as meowOptions } from "meow";
+import meow, { Options as meowOptions, Result as meowResult } from "meow";
 import { resolve } from "path";
 import { EOL } from "os";
 import fs from "fs";
@@ -10,7 +10,7 @@ import concatMd from "../index";
 const lstat = fs.promises.lstat;
 
 /** @ignore */
-interface Result extends meow.Result<any> {
+interface Result extends meowResult<any> {
   flags: {
     ignore: string;
     toc: boolean;
