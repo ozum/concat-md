@@ -76,8 +76,8 @@ describe("concat", () => {
   });
 
   it("should not add fake anchors", async () => {
-    const result = await concat(join(__dirname, "test-helper/with-links"), { hideAnchorLinks: true });
-    const expected = await getExpected("without-links");
+    const result = await concat(join(__dirname, "test-helper/without-links"), { hideAnchorLinks: true });
+    const expected = await getExpected("without-links.txt");
     expect(result).toBe(expected);
   });
 });

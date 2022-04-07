@@ -1,7 +1,3 @@
-# Test
-
-Content
-
 # Test B
 
 Test content
