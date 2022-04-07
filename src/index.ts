@@ -72,6 +72,10 @@ export interface ConcatOptions {
    * Whether to use directory names as titles.
    */
   dirNameAsTitle?: boolean;
+  /**
+   * Do not add anchor links
+   */
+  hideAnchorLinks?: boolean;
 }
 
 /**
@@ -95,6 +99,7 @@ class MarkDownConcatenator {
   private titleKey?: string;
   private fileNameAsTitle: boolean;
   private dirNameAsTitle: boolean;
+  private hideAnchorLinks: boolean;
   private joinString: string;
   private visitedDirs: Set<string> = new Set();
   private fileTitleIndex: Map<string, { title: string; level: number; md: string }> = new Map();
@@ -113,6 +118,7 @@ class MarkDownConcatenator {
       titleKey,
       dirNameAsTitle = false,
       fileNameAsTitle = false,
+      hideAnchorLinks = false,
     }: ConcatOptions = {} as any
   ) {
     this.dir = dir;
@@ -125,6 +131,7 @@ class MarkDownConcatenator {
     this.titleKey = titleKey;
     this.dirNameAsTitle = dirNameAsTitle;
     this.fileNameAsTitle = fileNameAsTitle;
+    this.hideAnchorLinks = hideAnchorLinks;
   }
 
   private decreaseTitleLevelsBy(body: string, level: number): string {
@@ -190,7 +197,9 @@ class MarkDownConcatenator {
       titleMd += `${titlePrefix} ${fileTitle}${titleSuffix}`;
     } else {
       fileTitle = gitHubLink(relative(this.dir, file.path));
-      titleMd += `\n<a name="${fileTitle}"></a>\n\n`; // Provide an anchor to point links to this location. (For existing links pointing to file.)
+      if (!this.hideAnchorLinks) {
+        titleMd += `\n<a name="${fileTitle}"></a>\n\n`; // Provide an anchor to point links to this location. (For existing links pointing to file.)
+      }
     }
 
     this.fileTitleIndex.set(file.path, { title: fileTitle, md: titleMd, level });
