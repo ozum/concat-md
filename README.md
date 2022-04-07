@@ -42,7 +42,7 @@ $ concat-md --toc --decrease-title-levels --file-name-as-title --dir-name-as-tit
 - Adds table of contents,
 - Optionally adds titles from `FrontMatter`, file names and directory names,
 - Decreases level of existing titles to comply with added titles,
-- Adds anchor tags (`<a name=""></a>`) to files, if no optional titles are generated.
+- Adds anchor tags (`<a name=""></a>`) to files, if no optional titles are generated and the `--hide-anchor-links` option is not enabled.
 - Converts relative links to point to concatenated file,
 - Works async (default) and sync.
 
@@ -61,6 +61,7 @@ Options
   --title-key <key name>            - Key name to get title in 'FrontMatter' meta data in markdown headers.
   --file-name-as-title              - Whether to use file names as titles.
   --dir-name-as-title               - Whether to use directory names as titles.
+  --hide-anchor-links               - Do not add anchor links if optional titles are not set.
   --debug                           - Print stack trace in errors.
 
 Examples
@@ -243,6 +244,7 @@ Concat function options.
 - [decreaseTitleLevels](#optional-decreasetitlelevels)
 - [dirNameAsTitle](#optional-dirnameastitle)
 - [fileNameAsTitle](#optional-filenameastitle)
+- [hideAnchorLinks](#optional-hideanchorlinks)
 - [ignore](#optional-ignore)
 - [joinString](#optional-joinstring)
 - [startTitleLevelAt](#optional-starttitlelevelat)
@@ -279,6 +281,16 @@ Whether to use directory names as titles.
 _Defined in [index.ts:68](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L68)_
 
 Whether to use file names as titles.
+
+---
+
+#### `Optional` hideAnchorLinks
+
+• **hideAnchorLinks**? : _undefined | false | true_
+
+_Defined in [index.ts:70](https://github.com/ozum/concat-md/blob/670ea75/src/index.ts#L70)_
+
+Do not add anchor links.
 
 ---
 

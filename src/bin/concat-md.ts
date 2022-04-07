@@ -21,6 +21,7 @@ interface Result extends meowResult<any> {
     titleKey: string;
     fileNameAsTitle: string;
     dirNameAsTitle: boolean;
+    hideAnchorLinks: boolean;
     debug: boolean;
     [name: string]: any;
   };
@@ -37,6 +38,7 @@ const FLAGS: meowOptions<any>["flags"] = {
   titleKey: { type: "string" },
   fileNameAsTitle: { type: "boolean" },
   dirNameAsTitle: { type: "boolean" },
+  hideAnchorLinks: { type: "boolean" },
   debug: { type: "boolean" },
 };
 
@@ -55,6 +57,7 @@ Options
   --title-key <key name>            - Key name to get title in 'FrontMatter' meta data in markdown headers.
   --file-name-as-title              - Whether to use file names as titles.
   --dir-name-as-title               - Whether to use directory names as titles.
+  --hide-anchor-links               - Do not add anchor links if optional titles are not set.
   --debug                           - Print stack trace in errors.
 
 Examples
