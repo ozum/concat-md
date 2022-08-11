@@ -247,6 +247,7 @@ Concat function options.
 - [hideAnchorLinks](#optional-hideanchorlinks)
 - [ignore](#optional-ignore)
 - [joinString](#optional-joinstring)
+- [sorter](#optional-sorter)
 - [startTitleLevelAt](#optional-starttitlelevelat)
 - [titleKey](#optional-titlekey)
 - [toc](#optional-toc)
@@ -313,6 +314,16 @@ _Defined in [index.ts:60](https://github.com/ozum/concat-md/blob/670ea75/src/ind
 String to be used to join concatenated files.
 
 ---
+
+### `Optional` sorter
+
+• **sorter**? : *undefined | (a: string, b: string) => number*
+
+*Defined in [index.ts:56](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L82)*
+
+Custom sort function. If not set, files are sorted alphabetically.
+
+___
 
 #### `Optional` startTitleLevelAt
 
