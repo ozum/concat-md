@@ -76,6 +76,10 @@ export interface ConcatOptions {
    * Do not add anchor links
    */
   hideAnchorLinks?: boolean;
+  /**
+   * Custom sort function. If not set, files are sorted alphabetically.
+   */
+  sorter?: (a: string, b: string) => number;
 }
 
 /**
@@ -105,6 +109,7 @@ class MarkDownConcatenator {
   private fileTitleIndex: Map<string, { title: string; level: number; md: string }> = new Map();
   private tocLevel: number;
   private files: File[] = [];
+  private sorter: ConcatOptions["sorter"];
 
   public constructor(
     dir: string,
@@ -119,6 +124,7 @@ class MarkDownConcatenator {
       dirNameAsTitle = false,
       fileNameAsTitle = false,
       hideAnchorLinks = false,
+      sorter = undefined,
     }: ConcatOptions = {} as any
   ) {
     this.dir = dir;
@@ -132,6 +138,7 @@ class MarkDownConcatenator {
     this.dirNameAsTitle = dirNameAsTitle;
     this.fileNameAsTitle = fileNameAsTitle;
     this.hideAnchorLinks = hideAnchorLinks;
+    this.sorter = sorter;
   }
 
   private decreaseTitleLevelsBy(body: string, level: number): string {
@@ -140,12 +147,12 @@ class MarkDownConcatenator {
 
   private async getFileNames(): Promise<string[]> {
     const paths = await globby([`**/*.md`], { cwd: this.dir, ignore: arrify(this.ignore) });
-    return paths.sort().map((path) => join(this.dir, path));
+    return paths.sort(this.sorter).map((path) => join(this.dir, path));
   }
 
   private getFileNamesSync(): string[] {
     const paths = globby.sync([`**/*.md`], { cwd: this.dir, ignore: arrify(this.ignore) });
-    return paths.sort().map((path) => join(this.dir, path));
+    return paths.sort(this.sorter).map((path) => join(this.dir, path));
   }
 
   private async getFileDetails(): Promise<File[]> {
