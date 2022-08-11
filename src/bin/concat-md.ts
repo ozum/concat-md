@@ -79,7 +79,7 @@ Examples
  * @ignore
  */
 function splitPaths(pathsCSV: string): string[] {
-  return pathsCSV ? pathsCSV.split(/\s*,\s*/).map((f) => resolve(f)) : [];
+  return pathsCSV ? pathsCSV.split(/\s*,\s*/) : [];
 }
 
 /** @ignore */

@@ -19,6 +19,7 @@ Concat function options.
 * [fileNameAsTitle](concatoptions.md#optional-filenameastitle)
 * [ignore](concatoptions.md#optional-ignore)
 * [joinString](concatoptions.md#optional-joinstring)
+* [sorter](concatoptions.md#optional-sorter)
 * [startTitleLevelAt](concatoptions.md#optional-starttitlelevelat)
 * [titleKey](concatoptions.md#optional-titlekey)
 * [toc](concatoptions.md#optional-toc)
@@ -73,6 +74,16 @@ ___
 *Defined in [index.ts:60](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L60)*
 
 String to be used to join concatenated files.
+
+___
+
+### `Optional` sorter
+
+• **sorter**? : *undefined | (a: string, b: string) => number*
+
+*Defined in [index.ts:56](https://github.com/ozum/concat-md/blob/3cf72b4/src/index.ts#L82)*
+
+Custom sort function. If not set, files are sorted alphabetically.
 
 ___
 
